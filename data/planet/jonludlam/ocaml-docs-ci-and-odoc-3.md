@@ -1,0 +1,38 @@
+---
+title: OCaml-Docs-CI and Odoc 3
+description:
+url: https://jon.recoil.org/blog/2025/04/ocaml-docs-ci-and-odoc-3.html
+date: 2025-04-29T00:00:00-00:00
+preview_image:
+authors:
+- Jon Ludlam
+source:
+ignore:
+---
+
+<h1><a href="https://jon.recoil.org/atom.xml#ocaml-docs-ci-and-odoc-3" class="anchor"></a>OCaml-Docs-CI and Odoc 3</h1>
+<ul class="at-tags"><li class="published"><span class="at-tag">published</span> <p>2025-04-29</p></li></ul>
+<ul class="at-tags"><li class="page-tags"><span class="at-tag">page-tags</span> <p><a href="https://jon.recoil.org/tags/odoc.html" title="odoc">odoc</a> <a href="https://jon.recoil.org/tags/docs-ci.html" title="docs-ci">docs-ci</a></p></li></ul>
+<p>The release of Odoc 3 means that we need to update the <a href="https://docs.ci.ocaml.org">docs-ci</a> project so that the documentation that appears on <a href="https://ocaml.org/p/">ocaml.org</a> is using the latest, greatest Odoc. With this major release of Odoc, it's also time to give the CI pipeline a bit of an overhaul too, and fix some of the irritations that it causes.</p>
+<h2><a href="https://jon.recoil.org/atom.xml#the-challenge-of-documenting-ocaml" class="anchor"></a>The challenge of documenting OCaml</h2>
+<p>As I wrote about <a href="https://jon.recoil.org/semantic-versioning-is-hard.html" title="semantic-versioning-is-hard">recently</a>, the APIs of OCaml libraries are dependent not only on the version of its package, but possibly also on the versions of any of its dependencies. Due to this fact, to produce the docs for ocaml.org means that sometimes we need to build the docs for a particular version of a particular package multiple times with different versions of its dependencies.</p>
+<p>It's clearly impractical to try to build every possible combination, so what we do is to run the opam solver once for each version of each package. This gives us a set of packages at particular versions. We then take that, and for each package in the set, we pluck out <i>its</i> dependencies from the set, producing a "universe" of dependencies for every package in the set. Let's look at a very simple example; the package <code>cry</code> from the <a href="https://www.liquidsoap.info">LiquidSoap</a> project.</p>
+<p>The oldest version of <code>cry</code> from before the <a href="https://discuss.ocaml.org/t/opam-repository-archival-phase-1-unavailable-packages/15797/6">Great Purge</a> was 0.2.2, which when solved produced the following dependencies:</p>
+<pre>cry.0.2.2
+ocaml.4.05.0
+ocaml-base-compiler.4.05.0
+ocaml-config.1
+ocamlfind.1.9.6</pre>
+<p>and the oldest version of <code>cry</code> after the purge is 0.6.0 which produces the following solution:</p>
+<pre>cry.0.6.0
+ocaml.5.2.1
+ocaml-base-compiler.5.2.1
+ocaml-config.3
+ocamlfind.1.9.6</pre>
+<p>so we we can see from these two solutions that we'll need to build <code>ocamlfind.1.9.6</code> twice, once with <code>ocaml.4.05.0</code> and once with <code>ocaml.5.2.1</code>.</p>
+<p>Once we've got, for every version of every package, a set of dependency universes, we choose one of these to be the one presented to the user under the <code>ocaml.org/p/</code> hierarchy. For all of the other universes, we build the package againt them, and put the docs under the <code>ocaml.org/u/</code> hierarchy.</p>
+<h2><a href="https://jon.recoil.org/atom.xml#performing-the-builds" class="anchor"></a>Performing the builds</h2>
+<p>Once we've got a complete set of solutions and builds to do, the current CI pipeline batches the builds up to try and build as many packages as possible in as few builds as possible. While this works well enough, it does mean that we build a lot packages more than once - dune, for example, is built thousands of times during this process, producing exactly the same binaries each time.</p>
+<p>In the new pipeline, I wrote a <a href="https://github.com/jonludlam/opamh">little tool</a> that allows opam packages to be archived and restored, which happens to work nicely because we're always building the packages in the same container in the same location. This means there are no worries about relocatability, although that is something that is <a href="https://www.dra27.uk/blog/platform/2025/04/22/branching-out.html">nearly here!</a></p>
+<p>The downside to this is that our storage requirements are quite a bit larger, as we're storing the entire package rather than just the bits that odoc needs. However, we were always going to use more storage than before simply because the new <code>odoc</code> and <code>odoc_driver</code> pair are more capable, and the new features like <a href="https://github.com/ocaml/odoc/pull/909">source code rendering</a> and <a href="https://github.com/ocaml/odoc/pull/1121/files#diff-10c8829023814c0bcc3316f95f643623404c000b13c68849ef3d61097a6e03a6R1-R415">classify</a> require more files from the original package.</p>
+<p>The upshot is that I'll be working with <a href="https://www.tunbury.org/">Mark Elvers</a> to move the docs CI from its current machine to a shiny new <a href="https://www.tunbury.org/blade-reallocation/">blade server</a>.</p>
