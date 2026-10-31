@@ -1,0 +1,54 @@
+---
+title: '.plan-26-43: Wireguard meshes over troubled water'
+description: Forester toplevels are working well in FoCS lectures, a smooth Patch
+  the Planet week with Trail of Bits, and drowning in security reports.
+url: https://anil.recoil.org/notes/2026w43
+date: 2026-10-25T00:00:00-00:00
+preview_image: https://anil.recoil.org/images/w43-1.640.webp
+authors:
+- Anil Madhavapeddy
+source:
+ignore:
+---
+
+<p><a href="https://anil.recoil.org/news.xml#teaching-with-focs-and-forester-is-a-success">Teaching with Forester</a> is going well, while the <a href="https://anil.recoil.org/news.xml#patch-the-planet-week-for-ocaml">Patch the Planet week</a> turned up new OCaml issues as <a href="https://anil.recoil.org/news.xml#other-security-reports-continue-to-flood-in">other security reports</a> pushed me towards <a href="https://anil.recoil.org/news.xml#hiding-services-behind-a-wireguard-mesh">a WireGuard mesh</a>. On the mapping side, I built <a href="https://anil.recoil.org/news.xml#my-first-android-app-for-the-field">my first Android app</a> for a field trip, talked <a href="https://anil.recoil.org/news.xml#human-in-the-loop-cartography">human-in-the-loop cartography</a> with a real cartographer, and applauded Tessera <a href="https://anil.recoil.org/news.xml#tessera-at-gtc-berlin-by-proxy">at GTC Berlin</a> from home base.</p>
+<h2><a href="https://anil.recoil.org/news.xml#teaching-with-focs-and-forester-is-a-success" class="anchor" aria-hidden="true"></a>Teaching with FoCS and Forester is a success</h2>
+<p>The <a href="https://anil.recoil.org/notes/focs">Foundations of Computer Science</a> lecture course is in <a href="https://anil.recoil.org/notes/2026w42">full swing</a> now, with the <a href="https://anil.recoil.org/notes/forester-teaching-notes">Forester interactive toplevels</a> working extremely well
+(<a href="https://www.cl.cam.ac.uk/teaching/2627/FoundsCS/forest/index/index.xml">link</a>).
+I've been switching to them from slides to illustrate points interactively
+during the lectures or in response to student questions, and it all follows
+very naturally from the main text.</p>
+<p>I think a good next step would be to have more direct Jupyter integration so
+that the web toplevel can be "upgraded" in place into a persistent
+session. <a href="https://web.eecs.umich.edu/~comar/">Cyrus Omar</a> is in Cambridge now for his sabbatical so I can ask him for
+UI advice on this front!</p>
+<p>The student feedback mid-course has also been very positive, and judging
+from the questions they are grappling with the content manually and not using
+LLMs, which continues to be a big relief. LLMs are good for summative goals,
+but terrible for any formative learning experiences without a lot of care going
+into how they're used, so it's great to see the self-motivation in our Cambridge
+undergrads.</p>
+<h2><a href="https://anil.recoil.org/news.xml#patch-the-planet-week-for-ocaml" class="anchor" aria-hidden="true"></a>Patch the Planet week for OCaml</h2>
+<p>A <a href="https://anil.recoil.org/notes/2026w36">few weeks ago</a> we <a href="https://anil.recoil.org/notes/2026w39">set up</a> the OCaml <a href="https://trailofbits.com/patch-the-planet/">Patch the Planet</a> week at Trail of Bits, which paired security engineers with us for the week of 19th October. The week did turn up several new potential issues in OCaml, and I thought that the process was very smooth and hopefully an indication of the sorts of cross-peer-review we might do more of for critical Internet infrastructure in the future.</p>
+<p>We agreed on the scope beforehand of which repos would be scanned, and then set up a private channel on the OCaml Zulip, with <a href="https://github.com/smoelius">Samuel Moelius</a> posting daily updates as he discovered issues. We had lots of help from <a href="https://github.com/edwintorok">Török Edwin</a> from Tarides who continuously triaged and guided the findings; Edwin was already fixing Scrutineer <a href="https://anil.recoil.org/notes/2026w40">results</a> alongside <a href="https://github.com/hannesm">Hannes Mehnert</a> and so was up to speed on the general LLM-security-issue workflow.</p>
+<h3><a href="https://anil.recoil.org/news.xml#other-security-reports-continue-to-flood-in" class="anchor" aria-hidden="true"></a>Other security reports continue to flood in</h3>
+<p>Elsewhere, a flood of security reports across various other projects has left me really underwater trying to deal with it all. Can't really even talk about their nature as just a <a href="https://anil.recoil.org/notes/rumour-is-the-exploit">rumour is enough now to trigger exploit generation</a> from bad actors.
+The <a href="https://www.ncsc.gov.uk/news/critical-security-issue-affecting-php">PHP vulnerability</a> basically took down half the Internet (including several UK governmental services). One bright spot was the <a href="https://www.bbc.co.uk/news/articles/cw30ejqljl43o">BBC article</a> which fêted the PHP developer who maintains the Debian packaging; this must be the first mainline news piece I can remember celebrating an open source packaging maintainer.</p>
+<p>Unfortunately, my inbox continues to be flooded by LLM-generated CVs, requests for internships, and phishing attacks to the point where a legitimate query about working with me is almost certainly getting lost. As <a href="https://patrick.sirref.org/weekly-2026-w43/">Patrick notes</a>, we're going to have to think hard about the nature of open source contributions now and how we choose to engage. I'm not in any way blaming the people using LLMs to apply for jobs and positions (it's a competitive world out there), but the social signals we used to depend on are now obsolete and I'm not sure (beyond personal recommendations) what the best way to fix this is.</p>
+<h3><a href="https://anil.recoil.org/news.xml#hiding-services-behind-a-wireguard-mesh" class="anchor" aria-hidden="true"></a>Hiding services behind a WireGuard mesh</h3>
+<p>One thing I did do due to all the security activity is to set up a private WireGuard mesh to take my self-hosted services off the public internet. This is still in a test phase, and I'm not actually using Tailscale for this. Tailscale is a brilliant piece of software, but has <a href="https://www.tailworm.com/">fairly complex</a> auth infrastructure to make it work. Instead, since my network is mostly static I'm going very very simple and using WireGuard p2p links directly. I'll write this up more in the coming weeks when things are a bit less mad.</p>
+<h2><a href="https://anil.recoil.org/news.xml#on-matters-of-mapping" class="anchor" aria-hidden="true"></a>On matters of mapping</h2>
+<p>I did get a chance to get some mapping related work done in the middle of everything else!</p>
+<h3><a href="https://anil.recoil.org/news.xml#my-first-android-app-for-the-field" class="anchor" aria-hidden="true"></a>My first Android app for the field</h3>
+<p>I caught up with <a href="https://liquidx.net">Alastair Tse</a> who showed me how to use Claude to build effective design previews (e.g. Material Design) before writing a single line of code. That's then enough to one-shot a full mobile application that runs on my Android! I used it to build a custom app that supports offline labelling for <a href="https://www.bangor.ac.uk/staff/sens/julia-patricia-gordon-jones-010356/en">Julia P.G. Jones</a>, who is off on a field trip to Madagascar soon and wanted to try out <a href="https://anil.recoil.org/projects/tessera">Tessera</a> on the ground.</p>
+<h3><a href="https://anil.recoil.org/news.xml#human-in-the-loop-cartography" class="anchor" aria-hidden="true"></a>Human-in-the-loop cartography</h3>
+<p><a href="https://aneeshnaik.github.io/">Aneesh Naik</a>, <a href="https://coomeslab.org">David Coomes</a> and I met <a href="https://www.perrinremonte.com/">Perrin Remonté</a> at the CCI, who builds the most incredible maps for a <a href="https://www.perrinremonte.com/home">variety</a> of regions and purposes. We discussed how to inject more human creativity into <a href="https://anil.recoil.org/projects/tessera">Tessera</a>-style mapping. One cool dream would be to have dynamically updated maps filled in with real data, but with the artistic vision authored by a cartographer. Human-in-the-loop mapping seems very achievable these days with LLM assistance, letting the human focus on the end goal while the data backfill happens through coding agents.</p>
+<p>Validation, however, remains the difficult piece, as we're <a href="https://digitalflapjack.com/weeknotes/2026-10-26/">finding with habitat mapping</a> and processing through vast data sources!</p>
+<p><a href="https://www.perrinremonte.com/subcontinent-eng"> <img src="https://anil.recoil.org/images/w43-1.webp" alt="%c" title="Perrin Remonté's gorgeous map of Delhi gardens"> </a></p>
+<h3><a href="https://anil.recoil.org/news.xml#tessera-at-gtc-berlin-by-proxy" class="anchor" aria-hidden="true"></a>Tessera at GTC Berlin by proxy</h3>
+<p><a href="https://toao.com">Sadiq Jaffer</a> travelled to <a href="https://www.nvidia.com/en-us/on-demand/session/gtcberlin26-sb61173/">GTC Berlin</a> to represent team <a href="https://anil.recoil.org/projects/tessera">Tessera</a>; I couldn't make it as I've been lecturing solid all week. We had a poster there but also a session on <a href="https://www.nvidia.com/en-us/on-demand/session/gtcberlin26-sb61173/">"AI for Science in Action: Using Today's Accelerated Discovery and What's Next"</a> with a lively panel discussion; the video is on the site.</p>
+<p>This was a great follow-up to <a href="https://anil.recoil.org/notes/ai-for-science-2024">AI for Science 2024</a> (how fast things have moved in just two years), and all the recent <a href="https://anil.recoil.org/notes/2026w42">NVIDIA events</a> have given us exciting leads on how to get access to sufficient compute resources to work on the next generation Tessera v3 models that we're cooking up at the moment.</p><h1>References</h1><ul><li>Madhavapeddy (2025). Foundations of Computer Science. <a href="https://doi.org/10.59350/qms3q-ymn65" target="_blank"><i>10.59350/qms3q-ymn65</i></a></li>
+<li>Madhavapeddy (2026). Just a rumour of a bug is enough to find a security exploit these days. <a href="https://doi.org/10.59350/tngsm-6rx23" target="_blank"><i>10.59350/tngsm-6rx23</i></a></li>
+<li>Madhavapeddy (2026). Using Forester to turn Foundations of CS into interactive evergreen lectures. <a href="https://doi.org/10.59350/sjcvd-hb857" target="_blank"><i>10.59350/sjcvd-hb857</i></a></li>
+<li>Madhavapeddy (2026). .plan-26-39: End of my sabbatical, and I feeeel fine!. <a href="https://doi.org/10.59350/veb7j-vh038" target="_blank"><i>10.59350/veb7j-vh038</i></a></li>
+<li>Madhavapeddy (2024). Royal Society and DeepMind host AI for Science Forum. <a href="https://doi.org/10.59350/0znpc-fw825" target="_blank"><i>10.59350/0znpc-fw825</i></a></li></ul>
